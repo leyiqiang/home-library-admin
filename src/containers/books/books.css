@@ -1,0 +1,8 @@
+.bookFilter.dropdown-menu {
+  z-index: 0;
+  position: relative;
+}
+
+.bookImage {
+  max-height: 250px;
+}
