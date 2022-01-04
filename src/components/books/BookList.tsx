@@ -1,5 +1,5 @@
-import { useSelector } from 'react-redux';
-import { selectBooksByCategory } from '../../store/books/booksSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectBooksByCategory, deleteBookById } from '../../store/books/booksSlice';
 import { Button, Card, Col, Modal, Row } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom'
 import { useState } from 'react';
@@ -7,6 +7,7 @@ import { useState } from 'react';
 const BookList = () => {
   const bookListByCategory = useSelector(selectBooksByCategory);
   const history = useHistory();
+  const dispatch = useDispatch();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [currentBookID, setCurrentBookID] = useState('');
   const [currentBookTitle, setCurrentBookTitle] = useState('');
@@ -16,6 +17,14 @@ const BookList = () => {
     setCurrentBookTitle('');
     setShowDeleteModal(false)
   };
+
+  const handleConfirmDelete = () => {
+    dispatch(deleteBookById(currentBookID));
+    setCurrentBookID('');
+    setCurrentBookTitle('');
+    setShowDeleteModal(false)
+  };
+
   const handleShow = (bookID: string, bookTitle: string) => {
     setCurrentBookID(bookID);
     setCurrentBookTitle(bookTitle);
@@ -52,11 +61,11 @@ const BookList = () => {
         </Modal.Header>
         <Modal.Body>Are you sure you want to delete this book: {currentBookTitle}?</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
+          <Button variant="secondary" onClick={handleConfirmDelete}>
+            Confirm
           </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Save Changes
+          <Button variant="danger" onClick={handleClose}>
+            Cancel
           </Button>
         </Modal.Footer>
       </Modal>

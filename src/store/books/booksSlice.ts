@@ -1,7 +1,7 @@
 import { createSlice, createSelector, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
-interface Book {
+export interface Book {
   id: string;
   title: string;
   author: string;
@@ -76,11 +76,14 @@ export const booksSlice = createSlice({
         state.bookList[idx] = newBookInfo;
       }
     },
+    deleteBookById: (state, action: PayloadAction<string>) => {
+      state.bookList = state.bookList.filter((b) => b.id !== action.payload)
+    }
   }
 })
 
 // actions
-export const { addBook, setCurrentCategory, setSearchByTitle } = booksSlice.actions;
+export const { addBook, setCurrentCategory, setSearchByTitle, deleteBookById, updateBookById } = booksSlice.actions;
 
 // selectors
 export const selectBookList = (state: RootState): Book[] => state.books.bookList;
