@@ -1,21 +1,16 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Book, selectBookList, updateBookById } from '../../store/books/booksSlice';
+import { addBook, Book, selectBookList, updateBookById } from '../../store/books/booksSlice';
 import { useHistory, useParams } from 'react-router-dom'
 import BookForm from '../../components/books/BookForm';
 import { Button, Col, Row } from 'react-bootstrap';
 
-type BookDetailParams = {
-  bookID: string;
-}
-
-const BookDetail = () => {
-  const bookList = useSelector(selectBookList);
-  const {bookID} = useParams<BookDetailParams>();
+const NewBook = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const selectedBook = bookList.find(b => b.id === bookID)
+  const selectedBook = {} as Book;
   const handleFormSubmit = (book: Book) => {
-    dispatch(updateBookById({id: bookID, newBookInfo: book}));
+    dispatch(addBook(book))
+    history.push('/');
   }
 
   return (
@@ -33,4 +28,4 @@ const BookDetail = () => {
   );
 }
 
-export default BookDetail;
+export default NewBook;

@@ -61,7 +61,10 @@ export const booksSlice = createSlice({
   initialState,
   reducers: {
     addBook: (state, action: PayloadAction<Book>) => {
-      state.bookList.push(action.payload);
+      const id = Math.floor(Math.random() * 100).toString();
+      let book = action.payload;
+      book.id = id;
+      state.bookList.push(book);
     },
     setCurrentCategory: (state, action: PayloadAction<string>) => {
       state.currentCategory = action.payload;
@@ -72,6 +75,7 @@ export const booksSlice = createSlice({
     updateBookById: (state, action: PayloadAction<{id:string, newBookInfo:Book}>) => {
       const {id, newBookInfo} = action.payload;
       let idx = state.bookList.findIndex(b => b.id === id)
+      newBookInfo.id = id;
       if (idx !== -1) {
         state.bookList[idx] = newBookInfo;
       }

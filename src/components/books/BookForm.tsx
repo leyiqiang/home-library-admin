@@ -1,6 +1,6 @@
 import { Button, Col, Form, Image, Row } from 'react-bootstrap';
 import * as React from 'react';
-import { useForm, Controller, SubmitHandler } from 'react-hook-form';
+import { useForm, Controller, SubmitHandler, FieldError } from 'react-hook-form';
 import { Book } from '../../store/books/booksSlice';
 
 type FormControlProps = {
@@ -10,8 +10,9 @@ type FormControlProps = {
   rules?: object;
   readOnly?: boolean;
   value: string;
+  error?: string;
 }
-const FormGroupComponent = ({ name, label, control, value, rules, readOnly = false }: FormControlProps) => {
+const FormGroupComponent = ({ name, label, control, value, rules, error = '', readOnly = false }: FormControlProps) => {
   return <>
     <Controller
       name={name}
@@ -19,14 +20,16 @@ const FormGroupComponent = ({ name, label, control, value, rules, readOnly = fal
       control={control}
       defaultValue={value}
       render={({ field }) =>
-        <Form.Group as={Row} className="mb-3" controlId="validationCustom01">
-          <Form.Label column sm="2"><b>{label}</b></Form.Label>
-          <Col sm="10">
-            <Form.Control
-              {...field}
-              readOnly={readOnly}
-            />
-          </Col>
+        <Form.Group as={Col} className="mb-3" md="6" controlId={'validation' + name}>
+          <Form.Label column sm="2">{label}</Form.Label>
+          <Form.Control
+            {...field}
+            readOnly={readOnly}
+            isInvalid={error !== ''}
+          />
+          <Form.Control.Feedback type="invalid">
+            {error}
+          </Form.Control.Feedback>
         </Form.Group>
       }
     />
@@ -53,7 +56,7 @@ type BookFormProps = {
   location?: string;
   category?: string;
   isbn?: string;
-  handleFormSubmit: (book:Book) => void;
+  handleFormSubmit: (book: Book) => void;
 }
 const BookForm = (props: BookFormProps) => {
   const {
@@ -62,24 +65,32 @@ const BookForm = (props: BookFormProps) => {
     formState: { errors },
   } = useForm<IFormInput>();
 
-  const onSubmit: SubmitHandler<IFormInput> = (data :Book) => {
+  const onSubmit: SubmitHandler<IFormInput> = (data: Book) => {
     props.handleFormSubmit(data);
   };
 
   return (
     <>
-      <Image src="https://picsum.photos/300/300" className="bookImage"/>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <FormGroupComponent name={'id'} label={'BookID'} control={control} value={props.id || ''}
-                            rules={{ required: true }} readOnly/>
-        <FormGroupComponent name={'title'} label={'Title'} control={control} rules={{ required: true }}
+        <Image src="https://picsum.photos/300/300" className="bookImage"/>
+        {/*<FormGroupComponent name={'id'} label={'BookID'} control={control}*/}
+        {/*                    value={props.id || ''}*/}
+        {/*                    rules={{ required: true }}*/}
+        {/*                    readOnly/>*/}
+        <FormGroupComponent name={'title'} label={'Title'} control={control}
+                            rules={{ required: true }}
+                            error={errors.title ? 'Title is required' : ''}
                             value={props.title || ''}/>
         <FormGroupComponent name={'author'} label={'Author'} control={control} value={props.author || ''}/>
         <FormGroupComponent name={'publisher'} label={'Publisher'} control={control} value={props.publisher || ''}/>
-        <FormGroupComponent name={'importedDate'} label={'ImportedDate'} control={control} value={props.importedDate || ''}/>
+        <FormGroupComponent name={'importedDate'} label={'ImportedDate'} control={control}
+                            value={props.importedDate || ''}/>
         <FormGroupComponent name={'location'} label={'Location'} control={control} value={props.location || ''}/>
         <FormGroupComponent name={'category'} label={'Category'} control={control} value={props.category || ''}/>
-        <FormGroupComponent name={'isbn'} label={'ISBN'} control={control} value={props.isbn || ''}/>
+        <FormGroupComponent name={'isbn'} label={'ISBN'} control={control}
+                            rules={{ pattern: /^(97(8|9))?\d{9}(\d|X)$/i }}
+                            error={errors.isbn ? 'Please enter proper ISBN format' : ''}
+                            value={props.isbn || ''}/>
         <Button type="submit">Confirm</Button>
       </Form>
 

@@ -4,6 +4,7 @@ import BookDetail from './books/BookDetail';
 import Books from './books/Books';
 import NavBar from '../components/NavBar';
 import Reservation from './Reservation';
+import NewBook from './books/NewBook';
 
 const SiteRouter = () => {
   return (
@@ -11,6 +12,9 @@ const SiteRouter = () => {
       <NavBar />
       <Container className="pageContainer">
         <Switch>
+          <Route exact path="/book/new">
+            <NewBook/>
+          </Route>
           <Route exact path="/books/:bookID">
             <BookDetail/>
           </Route>
