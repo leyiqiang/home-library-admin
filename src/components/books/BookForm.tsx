@@ -1,4 +1,4 @@
-import { Button, Col, Form, Image, Row } from 'react-bootstrap';
+import { Alert, Button, Col, Form, Image, Row } from 'react-bootstrap';
 import * as React from 'react';
 import { useForm, Controller, SubmitHandler, FieldError } from 'react-hook-form';
 import { Book } from '../../store/books/booksSlice';
@@ -11,8 +11,9 @@ type FormControlProps = {
   readOnly?: boolean;
   value: string;
   error?: string;
+  type?: string;
 }
-const FormGroupComponent = ({ name, label, control, value, rules, error = '', readOnly = false }: FormControlProps) => {
+const FormGroupComponent = ({ name, label, control, value, rules, error = '', type='text', readOnly = false }: FormControlProps) => {
   return <>
     <Controller
       name={name}
@@ -24,6 +25,7 @@ const FormGroupComponent = ({ name, label, control, value, rules, error = '', re
           <Form.Label column sm="2">{label}</Form.Label>
           <Form.Control
             {...field}
+            type={type}
             readOnly={readOnly}
             isInvalid={error !== ''}
           />
@@ -84,6 +86,7 @@ const BookForm = (props: BookFormProps) => {
         <FormGroupComponent name={'author'} label={'Author'} control={control} value={props.author || ''}/>
         <FormGroupComponent name={'publisher'} label={'Publisher'} control={control} value={props.publisher || ''}/>
         <FormGroupComponent name={'importedDate'} label={'ImportedDate'} control={control}
+                            type={'date'}
                             value={props.importedDate || ''}/>
         <FormGroupComponent name={'location'} label={'Location'} control={control} value={props.location || ''}/>
         <FormGroupComponent name={'category'} label={'Category'} control={control} value={props.category || ''}/>
