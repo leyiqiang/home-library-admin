@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { addBook, Book, selectBookList, updateBookById } from '../../store/books/booksSlice';
+import { addBook, Book, selectBookList, updateBookById } from '../../store/booksSlice';
 import { useHistory, useParams } from 'react-router-dom'
 import BookForm from '../../components/books/BookForm';
 import { Button, Col, Row } from 'react-bootstrap';

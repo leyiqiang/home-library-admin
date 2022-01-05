@@ -1,17 +1,24 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { selectBooksByCategory, deleteBookById } from '../../store/books/booksSlice';
+import { selectBooksByCategory, deleteBookById, selectStatus, allBooks } from '../../store/booksSlice';
 import { Button, Card, Col, Modal, Row } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { STATUS } from '../../utils/constants';
 
 const BookList = () => {
-  const bookListByCategory = useSelector(selectBooksByCategory);
   const history = useHistory();
   const dispatch = useDispatch();
+  const bookListByCategory = useSelector(selectBooksByCategory);
+  const bookStatus = useSelector(selectStatus);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [currentBookID, setCurrentBookID] = useState('');
   const [currentBookTitle, setCurrentBookTitle] = useState('');
 
+  useEffect(()=> {
+    if (bookStatus === STATUS.IDLE) {
+      dispatch(allBooks());
+    }
+  }, [bookStatus, dispatch])
   const handleClose = () => {
     setCurrentBookID('');
     setCurrentBookTitle('');
@@ -39,7 +46,7 @@ const BookList = () => {
               <Card>
                 <Card.Img variant="top" src="https://picsum.photos/200/300" className="bookImage"/>
                 <Card.Body>
-                  <Card.Title><Link to={'/books/' + b.id}>{b.title}</Link></Card.Title>
+                  <Card.Title><Link to={'/books/' + b._id}>{b.title}</Link></Card.Title>
                   <Card.Text>
                     {b.author}
                   </Card.Text>
@@ -47,9 +54,9 @@ const BookList = () => {
                     {b.category}
                   </footer>
                   <Button variant="primary" onClick={() => {
-                    history.push('/books/' + b.id)
+                    history.push('/books/' + b._id)
                   }}>Edit</Button>
-                  <Button variant="danger" onClick={() => handleShow(b.id, b.title)}>Delete</Button>
+                  <Button variant="danger" onClick={() => handleShow(b._id, b.title)}>Delete</Button>
                 </Card.Body>
               </Card>
             </Col>)

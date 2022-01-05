@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Book, selectBookList, updateBookById } from '../../store/books/booksSlice';
+import { Book, selectBookList, updateBookById } from '../../store/booksSlice';
 import { useHistory, useParams } from 'react-router-dom'
 import BookForm from '../../components/books/BookForm';
 import { Button, Col, Row } from 'react-bootstrap';
@@ -13,7 +13,7 @@ const BookDetail = () => {
   const {bookID} = useParams<BookDetailParams>();
   const history = useHistory();
   const dispatch = useDispatch();
-  const selectedBook = bookList.find(b => b.id === bookID)
+  const selectedBook = bookList.find(b => b._id === bookID)
   const handleFormSubmit = (book: Book) => {
     dispatch(updateBookById({id: bookID, newBookInfo: book}));
   }

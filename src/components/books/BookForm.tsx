@@ -1,7 +1,7 @@
 import { Alert, Button, Col, Form, Image, Row } from 'react-bootstrap';
 import * as React from 'react';
 import { useForm, Controller, SubmitHandler, FieldError } from 'react-hook-form';
-import { Book } from '../../store/books/booksSlice';
+import { Book } from '../../store/booksSlice';
 
 type FormControlProps = {
   name: string;
@@ -39,7 +39,7 @@ const FormGroupComponent = ({ name, label, control, value, rules, error = '', ty
 }
 
 interface IFormInput {
-  id: string;
+  _id: string;
   title: string;
   author: string;
   publisher: string;
@@ -50,7 +50,7 @@ interface IFormInput {
 }
 
 type BookFormProps = {
-  id?: string;
+  _id?: string;
   title?: string;
   author?: string;
   publisher?: string;
