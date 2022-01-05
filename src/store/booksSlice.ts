@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './store';
-import { getAllBooks } from '../api/books';
+import { deleteBookByID, getAllBooks, postNewBook } from '../api/books';
 import { STATUS } from '../utils/constants';
 
 export interface Book {
@@ -40,38 +40,12 @@ const initialState: Books = {
       category: 'Energy Industry Consult',
       isbn: '9787519840846'
     },
-    {
-      _id: 'EIC0002',
-      title: '2019年全球水电行业年度发展报告',
-      author: '国家水电可持续发展 研究中心',
-      publisher: '中国水利水电出版社',
-      importedDate: '2021-07-12',
-      location: '2',
-      category: 'Energy Industry Consult',
-      isbn: '9787517089216'
-    },
-    {
-      _id: 'In0001',
-      title: 'Sex & The Psych',
-      author: 'Brett Kahr',
-      publisher: '华东师范大学出版社',
-      importedDate: '2021-07-12',
-      location: '1',
-      category: 'Inspiration',
-      isbn: '9780141024844'
-    }
   ]
 }
 export const booksSlice = createSlice({
   name: 'books',
   initialState,
   reducers: {
-    addBook: (state, action: PayloadAction<Book>) => {
-      const id = Math.floor(Math.random() * 100).toString();
-      let book = action.payload;
-      book._id = id;
-      state.bookList.push(book);
-    },
     setCurrentCategory: (state, action: PayloadAction<string>) => {
       state.currentCategory = action.payload;
     },
@@ -85,9 +59,6 @@ export const booksSlice = createSlice({
       if (idx !== -1) {
         state.bookList[idx] = newBookInfo;
       }
-    },
-    deleteBookById: (state, action: PayloadAction<string>) => {
-      state.bookList = state.bookList.filter((b) => b._id !== action.payload)
     }
   },
   extraReducers(builder) {
@@ -97,9 +68,35 @@ export const booksSlice = createSlice({
       })
       .addCase(allBooks.fulfilled, (state, action) => {
         state.status = STATUS.SUCCEEDED;
-        state.bookList = action.payload.books;
+        state.bookList = action.payload.books || [];
+        const s : Set<string> = new Set(state.bookList.map(b => b.category));
+        const a: string[] = Array.from(s);
+        state.categories = ['All', ...a]
       })
       .addCase(allBooks.rejected, (state, action) => {
+        state.status = STATUS.FAILED;
+        state.error = action.error.message;
+      })
+      .addCase(deleteBook.pending, (state, action) => {
+        state.status = STATUS.LOADING;
+      })
+      .addCase(deleteBook.fulfilled, (state, action) => {
+        state.status = STATUS.SUCCEEDED;
+        state.bookList = state.bookList.filter((b) => b._id !== action.payload)
+      })
+      .addCase(deleteBook.rejected, (state, action) => {
+        state.status = STATUS.FAILED;
+        state.error = action.error.message;
+      })
+      .addCase(addBook.pending, (state, action) => {
+        state.status = STATUS.LOADING;
+      })
+      .addCase(addBook.fulfilled, (state, action) => {
+        state.status = STATUS.SUCCEEDED;
+          let book = action.payload;
+          state.bookList.push(book);
+      })
+      .addCase(addBook.rejected, (state, action) => {
         state.status = STATUS.FAILED;
         state.error = action.error.message;
       })
@@ -107,19 +104,28 @@ export const booksSlice = createSlice({
 })
 
 // actions
-export const { addBook, setCurrentCategory, setSearchByTitle, deleteBookById, updateBookById } = booksSlice.actions;
+export const { setCurrentCategory, setSearchByTitle, updateBookById } = booksSlice.actions;
 export const allBooks = createAsyncThunk('/books/allBooks', async () => {
   const response = await getAllBooks();
-  console.log(response.data)
   return response.data;
 })
 
+export const deleteBook = createAsyncThunk('/books/deleteBook', async (id: string) => {
+  await deleteBookByID(id);
+  return id;
+})
+
+export const addBook = createAsyncThunk('/books/addBook', async (book: Book) => {
+  await postNewBook(book);
+  return book;
+})
 
 // selectors
 export const selectBookList = (state: RootState): Book[] => state.books.bookList;
 export const selectBookCategories = (state: RootState): string[] => state.books.categories;
 export const selectCurrentCategory = (state: RootState): string => state.books.currentCategory;
 export const selectStatus = (state: RootState): string => state.books.status;
+export const selectError = (state: RootState): string | undefined => state.books.error;
 
 const selectSearchByTitle = (state: RootState): string => state.books.searchByName;
 

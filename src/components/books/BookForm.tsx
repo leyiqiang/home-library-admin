@@ -91,7 +91,7 @@ const BookForm = (props: BookFormProps) => {
         <FormGroupComponent name={'location'} label={'Location'} control={control} value={props.location || ''}/>
         <FormGroupComponent name={'category'} label={'Category'} control={control} value={props.category || ''}/>
         <FormGroupComponent name={'isbn'} label={'ISBN'} control={control}
-                            rules={{ pattern: /^(97(8|9))?\d{9}(\d|X)$/i }}
+                            // rules={{ pattern: /^(97(8|9))?\d{9}(\d|X)$/i }}
                             error={errors.isbn ? 'Please enter proper ISBN format' : ''}
                             value={props.isbn || ''}/>
         <Button type="submit">Confirm</Button>

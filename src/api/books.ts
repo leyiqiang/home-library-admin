@@ -2,13 +2,29 @@ import { axios } from './axios'
 import { Book } from '../store/booksSlice';
 
 const BOOK = '/book'
-
 const BOOK_ALL = BOOK + '/all'
 
 
-export interface BookResponse {
-  books: Book[];
-}
 export const getAllBooks = async () => {
-  return await axios.get<BookResponse>(BOOK_ALL);
+  return await axios.get<{ books: Book[] }>(BOOK_ALL);
+}
+
+export const getOneBookByID = async (id: string) => {
+  return await axios.get<{ book: Book }>(BOOK + '/' + id);
+}
+
+export const deleteBookByID = async (id: string) => {
+  return await axios.delete<object>(BOOK + '/' + id);
+}
+
+export const putBookInfo = async (id: string, book: Book) => {
+  return await axios.put<{book: Book}>(BOOK + '/' + id, {
+    ...book
+  });
+}
+
+export const postNewBook = async (book: Book) => {
+  return await axios.post<{book: Book}>(BOOK + '/', {
+    ...book
+  });
 }
