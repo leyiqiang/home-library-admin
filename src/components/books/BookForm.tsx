@@ -1,7 +1,7 @@
 import { Alert, Button, Col, Form, Image, Row } from 'react-bootstrap';
 import * as React from 'react';
 import { useForm, Controller, SubmitHandler, FieldError } from 'react-hook-form';
-import { Book } from '../../store/booksSlice';
+import { Book } from '../../store/books/booksSlice';
 
 type FormControlProps = {
   name: string;

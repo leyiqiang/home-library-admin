@@ -1,5 +1,5 @@
 import { axios } from './axios'
-import { Book } from '../store/booksSlice';
+import { Book } from '../store/books/booksSlice';
 
 const BOOK = '/book'
 const BOOK_ALL = BOOK + '/all'

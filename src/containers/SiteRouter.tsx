@@ -1,10 +1,11 @@
-import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Switch, Redirect } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import BookDetail from './books/BookDetail';
 import Books from './books/Books';
 import NavBar from '../components/NavBar';
 import Reservation from './Reservation';
 import NewBook from './books/NewBook';
+import NotFound from './NotFound';
 
 const SiteRouter = () => {
   return (
@@ -21,8 +22,14 @@ const SiteRouter = () => {
           <Route exact path="/reservation">
             <Reservation/>
           </Route>
-          <Route path="/">
+          <Route exact path="/">
+            <Redirect to ="/books" />
+          </Route>
+          <Route path="/books">
             <Books/>
+          </Route>
+          <Route path="*">
+            <NotFound />
           </Route>
         </Switch>
       </Container>

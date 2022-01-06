@@ -1,8 +1,9 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { addBook, Book, selectBookList, updateBookById } from '../../store/booksSlice';
-import { useHistory, useParams } from 'react-router-dom'
+import { useDispatch } from 'react-redux';
+import { Book } from '../../store/books/booksSlice';
+import { useHistory } from 'react-router-dom'
 import BookForm from '../../components/books/BookForm';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Row } from 'react-bootstrap';
+import { addBook } from '../../store/books/booksActions';
 
 const NewBook = () => {
   const history = useHistory();

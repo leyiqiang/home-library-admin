@@ -1,9 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { selectBooksByCategory, selectStatus, allBooks, deleteBook, selectError } from '../../store/booksSlice';
 import { Button, Card, Col, Modal, Row, Spinner } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom'
 import { useEffect, useState } from 'react';
 import { STATUS } from '../../utils/constants';
+import { allBooks, deleteBook } from '../../store/books/booksActions';
+import { selectBooksByCategory, selectError, selectStatus } from '../../store/books/booksSelectors';
 
 const BookList = () => {
   const history = useHistory();

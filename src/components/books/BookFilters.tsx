@@ -1,8 +1,8 @@
 import * as React from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { selectBookCategories, selectCurrentCategory, setSearchByTitle } from '../../store/booksSlice';
 import { Button, Dropdown, FormControl, InputGroup, ListGroup } from 'react-bootstrap';
-import { setCurrentCategory } from '../../store/booksSlice';
+import { selectBookCategories, selectCurrentCategory } from '../../store/books/booksSelectors';
+import { setCurrentCategory, setSearchByTitle } from '../../store/books/booksActions';
 
 const BookFilters = () => {
   const bookCategories = useSelector(selectBookCategories);

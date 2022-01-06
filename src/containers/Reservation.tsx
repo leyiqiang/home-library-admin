@@ -1,4 +1,4 @@
-const Reservation = ({isAdmin=false}: {isAdmin?: boolean}) => {
+const Reservation = () => {
   return (
     <div>
       <h1> Reservation Component</h1>

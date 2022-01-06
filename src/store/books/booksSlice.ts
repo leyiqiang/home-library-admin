@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from './store';
-import { deleteBookByID, getAllBooks, postNewBook } from '../api/books';
-import { STATUS } from '../utils/constants';
+import { RootState } from '../store';
+import { deleteBookByID, getAllBooks, postNewBook } from '../../api/books';
+import { STATUS } from '../../utils/constants';
+import { addBook, allBooks, deleteBook } from './booksActions';
 
 export interface Book {
   _id: string;
@@ -102,46 +103,6 @@ export const booksSlice = createSlice({
       })
   }
 })
-
-// actions
-export const { setCurrentCategory, setSearchByTitle, updateBookById } = booksSlice.actions;
-export const allBooks = createAsyncThunk('/books/allBooks', async () => {
-  const response = await getAllBooks();
-  return response.data;
-})
-
-export const deleteBook = createAsyncThunk('/books/deleteBook', async (id: string) => {
-  await deleteBookByID(id);
-  return id;
-})
-
-export const addBook = createAsyncThunk('/books/addBook', async (book: Book) => {
-  await postNewBook(book);
-  return book;
-})
-
-// selectors
-export const selectBookList = (state: RootState): Book[] => state.books.bookList;
-export const selectBookCategories = (state: RootState): string[] => state.books.categories;
-export const selectCurrentCategory = (state: RootState): string => state.books.currentCategory;
-export const selectStatus = (state: RootState): string => state.books.status;
-export const selectError = (state: RootState): string | undefined => state.books.error;
-
-const selectSearchByTitle = (state: RootState): string => state.books.searchByName;
-
-
-export const selectBooksByCategory = createSelector(
-  selectBookList,
-  selectCurrentCategory,
-  selectSearchByTitle,
-  (bookList, currentCategory, searchByTitle): Book[] => {
-    if (currentCategory === '' || currentCategory === 'All') {
-      return bookList.filter((b) => b.title.includes(searchByTitle));
-    } else {
-      return bookList.filter((b) => b.category === currentCategory && b.title.includes(searchByTitle))
-    }
-  }
-)
 
 // reducer
 export default booksSlice.reducer;
