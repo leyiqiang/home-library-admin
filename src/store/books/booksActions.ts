@@ -14,6 +14,7 @@ export const deleteBook = createAsyncThunk('/books/deleteBook', async (id: strin
 })
 
 export const addBook = createAsyncThunk('/books/addBook', async (book: Book) => {
-  await postNewBook(book);
+  const res = await postNewBook(book);
+  
   return book;
 })

@@ -1,6 +1,4 @@
-import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../store';
-import { deleteBookByID, getAllBooks, postNewBook } from '../../api/books';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { STATUS } from '../../utils/constants';
 import { addBook, allBooks, deleteBook } from './booksActions';
 
@@ -20,7 +18,7 @@ interface Books {
   searchByName: string;
   bookList: Book[];
   categories: string[];
-  status:  STATUS.IDLE | STATUS.LOADING | STATUS.SUCCEEDED | STATUS.FAILED;
+  status: STATUS.IDLE | STATUS.LOADING;
   error: string | undefined;
 }
 
@@ -66,39 +64,45 @@ export const booksSlice = createSlice({
     builder
       .addCase(allBooks.pending, (state, action) => {
         state.status = STATUS.LOADING;
+        state.error = '';
       })
       .addCase(allBooks.fulfilled, (state, action) => {
-        state.status = STATUS.SUCCEEDED;
+        state.status = STATUS.IDLE;
         state.bookList = action.payload.books || [];
-        const s : Set<string> = new Set(state.bookList.map(b => b.category));
+        const s: Set<string> = new Set(state.bookList.map(b => b.category));
         const a: string[] = Array.from(s);
         state.categories = ['All', ...a]
+        state.error = '';
       })
       .addCase(allBooks.rejected, (state, action) => {
-        state.status = STATUS.FAILED;
+        state.status = STATUS.IDLE;
         state.error = action.error.message;
       })
       .addCase(deleteBook.pending, (state, action) => {
         state.status = STATUS.LOADING;
+        state.error = '';
       })
       .addCase(deleteBook.fulfilled, (state, action) => {
-        state.status = STATUS.SUCCEEDED;
+        state.status = STATUS.IDLE;
+        state.error = '';
         state.bookList = state.bookList.filter((b) => b._id !== action.payload)
       })
       .addCase(deleteBook.rejected, (state, action) => {
-        state.status = STATUS.FAILED;
+        state.status = STATUS.IDLE;
         state.error = action.error.message;
       })
       .addCase(addBook.pending, (state, action) => {
         state.status = STATUS.LOADING;
+        state.error = '';
       })
       .addCase(addBook.fulfilled, (state, action) => {
-        state.status = STATUS.SUCCEEDED;
-          let book = action.payload;
-          state.bookList.push(book);
+        state.status = STATUS.IDLE;
+        let book = action.payload;
+        state.bookList.push(book);
+        state.error = '';
       })
       .addCase(addBook.rejected, (state, action) => {
-        state.status = STATUS.FAILED;
+        state.status = STATUS.IDLE;
         state.error = action.error.message;
       })
   }

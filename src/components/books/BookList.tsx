@@ -17,11 +17,15 @@ const BookList = () => {
   const [currentBookID, setCurrentBookID] = useState('');
   const [currentBookTitle, setCurrentBookTitle] = useState('');
 
+
   useEffect(() => {
-    if (bookStatus === STATUS.IDLE) {
-      dispatch(allBooks());
-    }
-  }, [bookStatus, dispatch])
+    dispatch(allBooks());
+  }, [])
+  // useEffect(() => {
+  //   if (bookStatus === STATUS.IDLE) {
+      // dispatch(allBooks());
+    // }
+  // }, [bookStatus, dispatch])
   const handleClose = () => {
     setCurrentBookID('');
     setCurrentBookTitle('');
@@ -47,7 +51,7 @@ const BookList = () => {
       <Spinner animation="border" role="status">
         <span className="visually-hidden">Loading...</span>
       </Spinner>
-  } else if (bookStatus === STATUS.SUCCEEDED) {
+  } else if (bookStatus === STATUS.IDLE && !error) {
     content =
       <>
         <Row xs={1} md={3} className="g-4">
@@ -88,7 +92,7 @@ const BookList = () => {
           </Modal.Footer>
         </Modal>
       </>;
-  } else if (bookStatus === STATUS.FAILED) {
+  } else if (error) {
     content = <p>Oops, something went wrong: {error}</p>;
   }
   return (

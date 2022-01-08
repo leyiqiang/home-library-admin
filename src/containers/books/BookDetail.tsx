@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Book } from '../../store/books/booksSlice';
 import { useHistory, useParams } from 'react-router-dom'
 import BookForm from '../../components/books/BookForm';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Row } from 'react-bootstrap';
 import { updateBookById } from '../../store/books/booksActions';
 import { selectBookList } from '../../store/books/booksSelectors';
 

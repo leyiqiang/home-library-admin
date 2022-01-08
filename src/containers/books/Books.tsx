@@ -1,6 +1,6 @@
 import BookFilters from '../../components/books/BookFilters';
 import './books.css'
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import BookList from '../../components/books/BookList';
 
 const Books = () => {
