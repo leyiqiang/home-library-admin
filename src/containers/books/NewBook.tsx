@@ -5,7 +5,6 @@ import BookForm from '../../components/books/BookForm';
 import { Button, Row, Toast, ToastContainer } from 'react-bootstrap';
 import { addBook } from '../../store/books/booksActions';
 import { useState } from 'react';
-import { SerializedError, unwrapResult } from '@reduxjs/toolkit';
 import { AppDispatch } from '../../store/store';
 
 const NewBook = () => {
@@ -15,13 +14,25 @@ const NewBook = () => {
   const [errMsg, setErrMsg] = useState('');
   const selectedBook = {} as Book;
   const handleFormSubmit = async (book: Book) => {
-    try {
-      const resultAction = await dispatch(addBook(book));
-      const promiseResult = unwrapResult(resultAction);
-      history.push('/');
-    } catch (err) {
-      setShowErr(true);
-      setErrMsg('Error: ' + (err as SerializedError).message || '');
+    // try {
+    //   const resultAction = await dispatch(addBook(book));
+    //   const promiseResult = unwrapResult(resultAction);
+    //   history.push('/');
+    // } catch (err) {
+    //   setShowErr(true);
+    //   setErrMsg('Error: ' + (err as SerializedError).message || '');
+    // }
+    const resultAction = await dispatch(addBook(book));
+    if (addBook.fulfilled.match(resultAction)) {
+      history.push('/')
+    } else {
+      if (resultAction.payload) {
+        setShowErr(true);
+        console.log(resultAction.payload)
+          setErrMsg('Error: ' + resultAction.payload.message);
+      } else {
+          setErrMsg('Error: ' + resultAction.error.message);
+      }
     }
 
   }
