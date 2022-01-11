@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { STATUS } from '../../utils/constants';
-import { addBook, allBooks, deleteBook } from './booksActions';
+import { addBook, allBooks, bookInfoByID, deleteBook, editBook } from './booksActions';
 
 export interface Book {
   _id: string;
@@ -16,6 +16,7 @@ export interface Book {
 interface Books {
   currentCategory: string,
   searchByName: string;
+  currentBookInfo: Book | undefined;
   bookList: Book[];
   categories: string[];
   status: STATUS.IDLE | STATUS.LOADING;
@@ -26,6 +27,7 @@ const initialState: Books = {
   status: STATUS.IDLE,
   error: undefined,
   currentCategory: 'All',
+  currentBookInfo: undefined,
   searchByName: '',
   categories: ['All', 'Energy Industry Consult', 'Inspiration'],
   bookList: [
@@ -104,6 +106,37 @@ export const booksSlice = createSlice({
       .addCase(addBook.rejected, (state, action) => {
         state.status = STATUS.IDLE;
         state.error = action.error.message;
+      })
+      .addCase(bookInfoByID.pending, (state, action) => {
+        state.status = STATUS.LOADING;
+        state.currentBookInfo = undefined;
+        state.error = '';
+      })
+      .addCase(bookInfoByID.fulfilled, (state, action) => {
+        state.status = STATUS.IDLE;
+        state.currentBookInfo = action.payload;
+        state.error = '';
+      })
+      .addCase(bookInfoByID.rejected, (state, action) => {
+        // state.status = STATUS.IDLE;
+        state.currentBookInfo = undefined;
+        state.error = action.error.message;
+      })
+      .addCase(editBook.pending, (state, action) => {
+        // state.status = STATUS.LOADING;
+        state.error = '';
+      })
+      .addCase(editBook.fulfilled, (state, action) => {
+        // state.status = STATUS.IDLE;
+        const book = action.payload;
+        state.currentBookInfo = book;
+        const idx = state.bookList.findIndex(b => b._id === book._id);
+        state.bookList[idx] = book;
+        state.error = '';
+      })
+      .addCase(editBook.rejected, (state, action) => {
+        state.status = STATUS.IDLE;
+        // state.error = action.error.message;
       })
   }
 })

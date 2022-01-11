@@ -1,4 +1,4 @@
-import { Button, Col, Form, Image } from 'react-bootstrap';
+import { Button, Col, Form, Image, Spinner } from 'react-bootstrap';
 import * as React from 'react';
 import { useForm, Controller, SubmitHandler, FieldError } from 'react-hook-form';
 import { Book } from '../../store/books/booksSlice';
@@ -13,7 +13,16 @@ type FormControlProps = {
   error?: string;
   type?: string;
 }
-const FormGroupComponent = ({ name, label, control, value, rules, error = '', type='text', readOnly = false }: FormControlProps) => {
+const FormGroupComponent = ({
+                              name,
+                              label,
+                              control,
+                              value,
+                              rules,
+                              error = '',
+                              type = 'text',
+                              readOnly = false
+                            }: FormControlProps) => {
   return <>
     <Controller
       name={name}
@@ -58,6 +67,9 @@ type BookFormProps = {
   location?: string;
   category?: string;
   isbn?: string;
+  errMsg?: string | undefined;
+  successMsg?: string | undefined;
+  isLoading?: boolean;
   handleFormSubmit: (book: Book) => void;
   onBackClicked: () => void;
 }
@@ -92,12 +104,25 @@ const BookForm = (props: BookFormProps) => {
         <FormGroupComponent name={'location'} label={'Location'} control={control} value={props.location || ''}/>
         <FormGroupComponent name={'category'} label={'Category'} control={control} value={props.category || ''}/>
         <FormGroupComponent name={'isbn'} label={'ISBN'} control={control}
-                            // rules={{ pattern: /^(97(8|9))?\d{9}(\d|X)$/i }}
+          // rules={{ pattern: /^(97(8|9))?\d{9}(\d|X)$/i }}
                             error={errors.isbn ? 'Please enter proper ISBN format' : ''}
                             value={props.isbn || ''}/>
-        <Button type="submit">Confirm</Button>
+        {props.isLoading ? <Button variant="primary" disabled>
+            <Spinner
+              as="span"
+              animation="grow"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+            />
+            Loading...
+          </Button> :
+          <Button type="submit">Confirm</Button>}
         {` `}
-        <Button variant="outline-primary"  onClick={props.onBackClicked}>Back</Button>
+        <Button variant="outline-primary" onClick={props.onBackClicked}>Back</Button>
+        {props.errMsg ? <p style={{ color: 'red' }}>{props.errMsg}</p> : ''}
+        {props.successMsg ? <p style={{ color: 'green' }}>{props.successMsg}</p> : ''}
+
       </Form>
 
     </>

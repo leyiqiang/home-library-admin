@@ -10,8 +10,7 @@ import { AppDispatch } from '../../store/store';
 const NewBook = () => {
   const history = useHistory();
   const dispatch = useDispatch<AppDispatch>();
-  const [showErr, setShowErr] = useState(false);
-  const [errMsg, setErrMsg] = useState('');
+  const [formErrMsg, setFormErrMsg] = useState<string | undefined>(undefined);
   const selectedBook = {} as Book;
   const handleFormSubmit = async (book: Book) => {
     // try {
@@ -24,13 +23,13 @@ const NewBook = () => {
     // }
     const resultAction = await dispatch(addBook(book));
     if (addBook.fulfilled.match(resultAction)) {
+      setFormErrMsg(undefined);
       history.push('/')
     } else {
       if (resultAction.payload) {
-        setShowErr(true);
-          setErrMsg('Error: ' + resultAction.payload.message);
+          setFormErrMsg('Error: ' + resultAction.payload.message);
       } else {
-          setErrMsg('Error: ' + resultAction.error.message);
+          setFormErrMsg('Error: ' + resultAction.error.message);
       }
     }
 
@@ -46,10 +45,10 @@ const NewBook = () => {
           <BookForm
             {...selectedBook}
             handleFormSubmit={handleFormSubmit}
+            errMsg={formErrMsg}
             onBackClicked={() => history.push('/')}
           /> :
           <p>Book Not Found!</p>}
-        {showErr? <p style={{color:'red'}}>{errMsg}</p> : ''}
       </Row>
     </>
   );

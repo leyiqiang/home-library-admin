@@ -8,6 +8,7 @@ export const selectBookCategories = (state: RootState): string[] => state.books.
 export const selectCurrentCategory = (state: RootState): string => state.books.currentCategory;
 export const selectStatus = (state: RootState): string => state.books.status;
 export const selectError = (state: RootState): string | undefined => state.books.error;
+export const selectCurrentBook = (state: RootState): Book | undefined => state.books.currentBookInfo;
 
 const selectSearchByTitle = (state: RootState): string => state.books.searchByName;
 
