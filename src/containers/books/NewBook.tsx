@@ -28,7 +28,6 @@ const NewBook = () => {
     } else {
       if (resultAction.payload) {
         setShowErr(true);
-        console.log(resultAction.payload)
           setErrMsg('Error: ' + resultAction.payload.message);
       } else {
           setErrMsg('Error: ' + resultAction.error.message);

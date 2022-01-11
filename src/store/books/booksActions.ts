@@ -9,8 +9,8 @@ interface BookValidationError {
 
 export const { setCurrentCategory, setSearchByTitle, updateBookById } = booksSlice.actions;
 export const allBooks = createAsyncThunk('/books/allBooks', async () => {
-  const response = await getAllBooks();
-  return response.data;
+  const res = await getAllBooks();
+  return res.data;
 })
 
 export const deleteBook = createAsyncThunk('/books/deleteBook', async (id: string) => {
@@ -24,7 +24,8 @@ export const addBook = createAsyncThunk<
   {rejectValue: BookValidationError}
   >('/books/addBook', async (book: Book, {rejectWithValue}) => {
   try {
-    await postNewBook(book);
+    const res = await postNewBook(book);
+    book._id = res.data.oid;
     return book;
   } catch (err) {
     let error = err as AxiosError<BookValidationError>;

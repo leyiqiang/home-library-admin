@@ -24,7 +24,7 @@ export const putBookInfo = async (id: string, book: Book) => {
 }
 
 export const postNewBook = async (book: Book) => {
-  return await axios.post<{book: Book}>(BOOK + '/', {
+  return await axios.post<{oid: string}>(BOOK + '/', {
     ...book
   });
 }
