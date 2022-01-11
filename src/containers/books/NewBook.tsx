@@ -43,11 +43,14 @@ const NewBook = () => {
         <h1 className="headerNav">BookInfo</h1>
       </Row>
       <Row>
-        {selectedBook ? <BookForm {...selectedBook} handleFormSubmit={handleFormSubmit}/> : <p>Book Not Found!</p>}
+        {selectedBook ?
+          <BookForm
+            {...selectedBook}
+            handleFormSubmit={handleFormSubmit}
+            onBackClicked={() => history.push('/')}
+          /> :
+          <p>Book Not Found!</p>}
         {showErr? <p style={{color:'red'}}>{errMsg}</p> : ''}
-      </Row>
-      <Row>
-        <Button variant="outline-primary" onClick={() => history.push('/')}>Back</Button>
       </Row>
     </>
   );

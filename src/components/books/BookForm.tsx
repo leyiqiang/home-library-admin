@@ -59,6 +59,7 @@ type BookFormProps = {
   category?: string;
   isbn?: string;
   handleFormSubmit: (book: Book) => void;
+  onBackClicked: () => void;
 }
 const BookForm = (props: BookFormProps) => {
   const {
@@ -95,6 +96,8 @@ const BookForm = (props: BookFormProps) => {
                             error={errors.isbn ? 'Please enter proper ISBN format' : ''}
                             value={props.isbn || ''}/>
         <Button type="submit">Confirm</Button>
+        {` `}
+        <Button variant="outline-primary"  onClick={props.onBackClicked}>Back</Button>
       </Form>
 
     </>
