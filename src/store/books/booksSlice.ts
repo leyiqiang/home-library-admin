@@ -73,7 +73,8 @@ export const booksSlice = createSlice({
         state.bookList = action.payload.books || [];
         const s: Set<string> = new Set(state.bookList.map(b => b.category));
         const a: string[] = Array.from(s);
-        state.categories = ['All', ...a]
+        a.splice(a.indexOf(""), 1)
+        state.categories = ['All', ...a, "Unknown"]
         state.error = '';
       })
       .addCase(allBooks.rejected, (state, action) => {

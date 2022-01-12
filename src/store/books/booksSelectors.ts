@@ -20,6 +20,8 @@ export const selectBooksByCategory = createSelector(
   (bookList, currentCategory, searchByTitle): Book[] => {
     if (currentCategory === '' || currentCategory === 'All') {
       return bookList.filter((b) => b.title.includes(searchByTitle));
+    } else if (currentCategory === "Unknown") {
+      return bookList.filter((b) => b.category === "")
     } else {
       return bookList.filter((b) => b.category === currentCategory && b.title.includes(searchByTitle))
     }

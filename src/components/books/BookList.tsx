@@ -63,10 +63,10 @@ const BookList = () => {
                   <Card.Body>
                     <Card.Title><Link to={'/books/' + b._id}>{b.title}</Link></Card.Title>
                     <Card.Text>
-                      {b.author}
+                      Author: {b.author || "unknown"}
                     </Card.Text>
                     <footer className="text-muted">
-                      {b.category}
+                      Category: {b.category || "category"}
                     </footer>
                     <Button variant="primary" onClick={() => {
                       history.push('/books/' + b._id)
