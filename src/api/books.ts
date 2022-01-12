@@ -4,6 +4,8 @@ import { Book } from '../store/books/booksSlice';
 const BOOK = '/book'
 const BOOK_ALL = BOOK + '/all'
 
+const ADMIN_BOOK = '/admin/book'
+
 
 export const getAllBooks = async () => {
   return await axios.get<{ books: Book[] }>(BOOK_ALL);
@@ -14,17 +16,17 @@ export const getOneBookByID = async (id: string) => {
 }
 
 export const deleteBookByID = async (id: string) => {
-  return await axios.delete<object>(BOOK + '/' + id);
+  return await axios.delete<object>(ADMIN_BOOK + '/' + id);
 }
 
 export const putBookInfo = async (id: string, book: Book) => {
-  return await axios.put<{book: Book}>(BOOK + '/' + id, {
+  return await axios.put<{book: Book}>(ADMIN_BOOK + '/' + id, {
     ...book
   });
 }
 
 export const postNewBook = async (book: Book) => {
-  return await axios.post<{oid: string}>(BOOK + '/', {
+  return await axios.post<{oid: string}>(ADMIN_BOOK + '/', {
     ...book
   });
 }
